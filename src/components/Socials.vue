@@ -6,15 +6,15 @@ import IconMedium from '@/assets/icons/medium.svg'
 const socials = [
   {
     icon: IconTwitter,
-    href: 'https://twitter.com/chiknstitute'
+    href: 'https://twitter.com/CerveauAI'
   },
   {
     icon: IconDiscord,
-    href: 'https://discord.gg/CvWbwD6Ndh'
+    href: 'https://discord.gg/N3KV523e2Q'
   },
   {
     icon: IconMedium,
-    href: 'https://medium.com/@chiknstitute/the-1st-annual-chikn-beauty-pageant-4b6e360be5ae'
+    href: 'https://cerveauai.com/'
   }
 ]
 </script>
