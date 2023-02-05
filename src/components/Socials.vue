@@ -1,7 +1,7 @@
 <script setup>
 import IconTwitter from '@/assets/icons/twitter.svg'
 import IconDiscord from '@/assets/icons/discord.svg'
-import IconMedium from '@/assets/icons/medium.svg'
+import IconBrain from '@/assets/icons/brain.svg'
 
 const socials = [
   {
@@ -13,7 +13,7 @@ const socials = [
     href: 'https://discord.gg/N3KV523e2Q'
   },
   {
-    icon: IconMedium,
+    icon: IconBrain,
     href: 'https://cerveauai.com/'
   }
 ]
