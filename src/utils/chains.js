@@ -54,5 +54,12 @@ export default {
     rpc: 'https://api.avax.network/ext/bc/C/rpc',
     currency: 'AVAX',
     ensSupported: false
+  },
+  '0xa869': {
+    name: 'FUJI Avalanche Testnet C-Chain',
+    explorer: 'https://testnet.snowtrace.io',
+    rpc: 'https://api.avax-test.network/ext/bc/C/rpc',
+    currency: 'AVAX',
+    ensSupported: false
   }
 }

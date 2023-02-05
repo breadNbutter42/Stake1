@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useAsyncState, useEventBus, useToggle } from '@vueuse/core'
-import { useEggContract, useUser, useVotingContract } from '@/composables'
+import { useJLPContract, useUser, useRewarderContract } from '@/composables'
 import { notify } from 'notiwind'
 import { candidateIds, randomize } from '@/utils'
 
@@ -9,8 +9,8 @@ const candidates = ref(randomize(candidateIds))
 
 const { on: onAppEvent, emit: emitAppEvent } = useEventBus('app')
 const { address, isAuthenticated, isAuthenticating, login } = useUser()
-const { symbol, allowance, approve, balanceOf } = useEggContract(address)
-const { voteOneEggForEachCandidate, prizeMoneyTotalWei, eggBurntTotalWei, allVotesTotalBase, totalVotesFromVoterAddress, votingTimeLeftBlockTimestampHours } = useVotingContract(address)
+const { symbol, allowance, approve, balanceOf } = useJLPContract(address)
+const { myDepositedLP, pendingTokens, deposit, withdrawMyLPAndRewards } = useRewarderContract(address)
 
 const loadAllowanceState = async () => {
   try {
@@ -40,13 +40,10 @@ const { state: allowanceState, execute: loadAllowance } = useAsyncState(() => lo
 
 const loadContractState = async () => {
   try {
-    const [burned, votes, prize, timestamp, user] = await Promise.all([eggBurntTotalWei(), allVotesTotalBase(), prizeMoneyTotalWei(), votingTimeLeftBlockTimestampHours(), loadUserState()])
+    const [myDepositedLP, user] = await Promise.all([myDepositedLP(), loadUserState()])
 
     return Promise.resolve({
-      burned,
-      votes,
-      prize,
-      timestamp,
+      myDepositedLP,
       ...user
     })
   } catch (error) {
@@ -57,9 +54,9 @@ const loadContractState = async () => {
 const loadUserState = async () => {
   if (!isAuthenticated.value) return Promise.resolve({ balance: 0, addressVotes: 0 })
   try {
-    const [balance, addressVotes] = await Promise.all([balanceOf(), totalVotesFromVoterAddress()])
+    const [balance, pendingTokens] = await Promise.all([balanceOf(), pendingTokens()])
 
-    return Promise.resolve({ balance, addressVotes })
+    return Promise.resolve({ balance, pendingTokens })
   } catch (error) {
     console.log(error)
   }
@@ -95,16 +92,16 @@ const setApprove = async (_count) => {
 }
 
 const votePending = ref(false)
-const vote1Egg = async () => {
+const vote1JLP = async () => {
   votePending.value = true
   try {
-    const tx = await voteOneEggForEachCandidate()
+    const tx = await voteOneJLPForEachCandidate()
     const receipt = await tx.wait()
 
     notify({
       type: 'success',
-      title: 'Voting',
-      text: `Voted 1 $EGG for each candidate`
+      title: 'Rewarder',
+      text: `Voted 1 $JLP for each candidate`
     })
     emitAppEvent({ type: 'tokensChanged' })
 
@@ -112,7 +109,7 @@ const vote1Egg = async () => {
   } catch (error) {
     notify({
       type: 'error',
-      title: 'Voting',
+      title: 'Rewarder',
       text: error.reason ?? error.message
     })
   } finally {
@@ -156,10 +153,10 @@ onAppEvent(({ type }) => {
           Chikn Beauty Pageant
         </div>
         <div class="text-2xl text-blue-300">
-          Community $EGG Burn Vote
+          Community $JLP Burn Vote
         </div>
         <div class="mt-2 mb-8 text-xs text-blue-200">
-          Voting Ends on October 18th at 1:30am UTC
+          Rewarder Ends on October 18th at 1:30am UTC
         </div>
       </div>
       
@@ -174,9 +171,9 @@ onAppEvent(({ type }) => {
           </Button>
           <Button
             :disabled="!allowanceState.allowance"
-            @click="vote1Egg()"
+            @click="vote1JLP()"
           >
-            Vote 1 $EGG for every candidate
+            Vote 1 $JLP for every candidate
           </Button>
           <Button @click="toggleLeaderboard()">
             Open leaderboard
@@ -212,21 +209,21 @@ onAppEvent(({ type }) => {
         <div class="font-bold">{{ state.timestamp }}</div>
       </div>
       <div class="px-6 py-4 shadow-sm bg-gradient-to-tr from-red-200/10 rounded-2xl flex justify-between items-center">
-        <div class="text-xs font-celaraz">$EGG balance</div>
-        <div class="font-bold">{{ state.balance }} $EGG</div>
+        <div class="text-xs font-celaraz">$JLP balance</div>
+        <div class="font-bold">{{ state.balance }} $JLP</div>
       </div>
       <div class="px-6 py-4 shadow-sm bg-gradient-to-tr from-red-200/10 rounded-2xl flex justify-between items-center">
         <div class="text-xs font-celaraz">Prize wallet</div>
-        <div class="font-bold">{{ Number(state.prize).toFixed(0) }} $EGG</div>
+        <div class="font-bold">{{ Number(state.prize).toFixed(0) }} $JLP</div>
       </div>
       <div class="px-6 py-4 shadow-sm bg-gradient-to-tr from-red-200/10 rounded-2xl flex justify-between items-center">
-        <div class="text-xs font-celaraz">Total $EGG burnt</div>
-        <div class="font-bold">{{ Number(state.burned).toFixed(0) }} $EGG</div>
+        <div class="text-xs font-celaraz">Total $JLP burnt</div>
+        <div class="font-bold">{{ Number(state.burned).toFixed(0) }} $JLP</div>
       </div>
     </div>
     <div class="mt-4 text-xs text-center flex flex-wrap gap-2 md:gap-6 italic">
       <div class="text-blue-200">
-        One $EGG = One Vote
+        One $JLP = One Vote
       </div>
       <div class="text-blue-200">
         Top 10 Chikns with the most votes advance to the final round
