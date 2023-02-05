@@ -1,6 +1,6 @@
 import { ethers } from 'ethers'
 import useUser from '@/composables/useUser'
-import abi from '@/abi/rewarder.json'
+import abi from '@/abi/Rewarder.json'
 import useUserStore from '@/stores/user'
 
 export default (address) => {
