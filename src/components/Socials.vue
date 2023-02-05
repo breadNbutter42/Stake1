@@ -9,12 +9,12 @@ const socials = [
     href: 'https://twitter.com/CerveauAI'
   },
   {
-    icon: IconDiscord,
-    href: 'https://discord.gg/N3KV523e2Q'
-  },
-  {
     icon: IconBrain,
     href: 'https://cerveauai.com/'
+  },
+  {
+    icon: IconDiscord,
+    href: 'https://discord.gg/N3KV523e2Q'
   }
 ]
 </script>
