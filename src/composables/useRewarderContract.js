@@ -11,8 +11,8 @@ export default (address) => {
   const setContract = (payload) => contract = new ethers.Contract(import.meta.env.VITE_CONTRACT_REWARDER, abi, payload)
 
   const myDepositedLP = async () => await contract.myDepositedLP().then(response => Number(ethers.utils.formatEther(response)).toFixed(2))
-  const pendingTokens = async (payload) => await contract.pendingTokens(payload ?? address.value).then(response => Number(ethers.utils.formatEther(response)).toFixed(2))
-  const deposit = async (amt) => await contract.deposit(amt)
+  const pendingRewards = async (payload) => await contract.pendingTokens(payload ?? address.value).then(response => Number(ethers.utils.formatEther(response)).toFixed(2))
+  const depositLP = async (amt) => await contract.deposit(amt)
   const withdrawMyLPAndRewards = async () => await contract.withdrawMyLPAndRewards()
   
   userStore.$onAction(({ name, after }) => {
@@ -31,8 +31,8 @@ export default (address) => {
   return {
     contract,
     myDepositedLP,
-    pendingTokens,
-    deposit,
+    pendingRewards,
+    depositLP,
     withdrawMyLPAndRewards
   }
 }

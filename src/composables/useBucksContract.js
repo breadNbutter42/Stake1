@@ -11,8 +11,8 @@ export default (address) => {
   let contract
   const setContract = (payload) => contract = new ethers.Contract(VITE_CONTRACT_BUCKS, abi, payload)
 
-  const symbol = async () => await contract.symbol()
-  const balanceOf = async (payload) => await contract.balanceOf(payload ?? address.value).then(response => Number(ethers.utils.formatEther(response)).toFixed(2))
+  const symbolBucks = async () => await contract.symbol()
+  const balanceOfBucks = async (payload) => await contract.balanceOf(payload ?? address.value).then(response => Number(ethers.utils.formatEther(response)).toFixed(2))
 
   
   userStore.$onAction(({ name, after }) => {
@@ -30,7 +30,7 @@ export default (address) => {
 
   return {
     contract,
-    symbol,
-    balanceOf
+    symbolBucks,
+    balanceOfBucks
   }
 }
