@@ -138,10 +138,10 @@ onAppEvent(({ type }) => {
           Cerveau AI $BUCKS Farm
         </div>
         <div class="text-2xl text-blue-300">
-          150,000 $BUCKS paid out over 60 days
+          Deposit JLP to earn rewards
         </div>
         <div class="mt-2 mb-8 text-xs text-blue-200">
-          Deposit Bucks/Avax JLP to earn rewards
+          150,000 $BUCKS rewards over 60 days
         </div>
       </div>
       
