@@ -177,9 +177,9 @@ const loadUserState = async () => {
 
     });
   } catch (error) {
-    console.log("--------------------------148--------------------------------");
+    console.log("----------------------------------------------------------");
     console.log(error);
-    console.log("--------------------------150--------------------------------");
+    console.log("----------------------------------------------------------");
   }
   return Promise.resolve({
     myDepositedLP: 0,
@@ -243,13 +243,18 @@ onAppEvent(({ type }) => {
 
 
           <Button
-            :disabled="!allowanceState.allowanceJLP || withdrawPending"
+            :disabled="!allowanceState.allowanceJLP || stakePending || state.balanceOfJLP==0"
+            :loading="stakePending"
             @click="depositThatLP(Number(state.balanceOfJLP))"
           >
             Stake All BUCKS/AVAX JLP
           </Button>
 
-          <Button :disabled="!state.myDepositedLP" @click="withdrawAll()">
+          <Button 
+            :disabled="state.myDepositedLP==0 || withdrawPending" 
+            :loading="withdrawPending"
+            @click="withdrawAll()"
+          >
             Withdraw All LP and Rewards
           </Button>
 
@@ -264,7 +269,7 @@ onAppEvent(({ type }) => {
           </div>
           <div class="text-left self-end">
             <Button
-              :disabled="!JLPCount || !allowanceState.allowanceJLP || stakePending"
+              :disabled="!JLPCount || !allowanceState.allowanceJLP || stakePending || state.balanceOfJLP==0"
               :loading="stakePending"
               @click="depositThatLP(Number(JLPCount))"
             >
