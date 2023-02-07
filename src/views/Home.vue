@@ -1,7 +1,7 @@
 <script setup>
+import { useJLPContract, useUser, useRewarderContract, useBucksContract } from '@/composables'
 import { ref, computed } from 'vue'
 import { useAsyncState, useEventBus, useToggle } from '@vueuse/core'
-import { useJLPContract, useUser, useRewarderContract, useBucksContract } from '@/composables'
 import { notify } from 'notiwind'
 
 const { on: onAppEvent, emit: emitAppEvent } = useEventBus('app')
@@ -12,7 +12,7 @@ const { myDepositedLP, pendingRewards, depositLP, withdrawMyLPAndRewards } = use
 
 const loadAllowanceState = async () => {
   try {
-    const [ _symbolBucks, _symbolJLP, _allowanceJLP] = await Promise.all([symbolBucks(), symbolJLP(), loadUserAllowance()])
+    const [ _symbolBucks, _symbolJLP, _allowanceJLP] = await Promise.all([symbolBucks, symbolJLP, loadUserAllowance()])
 
     return Promise.resolve({
       symbolBucks: _symbolBucks,
@@ -26,6 +26,11 @@ const loadAllowanceState = async () => {
       text: error.reason ?? error.message
     })
   }
+  return Promise.resolve({
+    symbolBucks: 'BUCKSS',
+    symbolJLP: 'JLPP',
+    allowanceJLP: 69696969696969696969696969696969696969
+  })
 }
 
 const loadUserAllowance = async () => {
@@ -66,7 +71,7 @@ const setApprove = async (_count) => {
 
 const withdrawMyLPAndRewardsPending = ref(false)
 const withdrawAll = async () => {
-  withdrawMyLPAndRewardsPending = true
+  withdrawMyLPAndRewardsPending.value = true
   try {
     const tx = await withdrawMyLPAndRewards()
     const receipt = await tx.wait()
@@ -104,12 +109,18 @@ const loadContractState = async () => {
 const loadUserState = async () => {
   if (!isAuthenticated.value) return Promise.resolve({ myDepositedLP: 0, balanceBucks: 0, balanceJLP: 0, pendingRewards: 0 })
   try {
-    const [myDepositedLP, balanceBucks, balanceJLP, pendingRewards] = await Promise.all([myDepositedLP(), balanceOfBucks(), balanceOfJLP(), pendingRewards()])
+    const [myDepositedLP, balanceBucks, balanceJLP, pendingRewards] = await Promise.all([myDepositedLP, balanceOfBucks, balanceOfJLP, pendingRewards])
 
     return Promise.resolve({ myDepositedLP, balanceBucks, balanceJLP, pendingRewards })
   } catch (error) {
     console.log(error)
   }
+  return Promise.resolve({
+    myDepositedLP: 69696969696969696969696969696969696969,
+    balanceBucks: 69696969696969696969696969696969696969,
+    balanceJLP: 69696969696969696969696969696969696969,
+    pendingRewards: 69696969696969696969696969696969696969
+  })
 }
 
 const { state, execute: loadStats } = useAsyncState(() => loadContractState(), {}, { resetOnExecute: false })
@@ -150,15 +161,15 @@ onAppEvent(({ type }) => {
           <Button
             :loading="approvalPending"
             :disabled="approvalPending || !isAuthenticated || isAuthenticating"
-            @click="allowanceState.allowanceJLP === 0 ? setApprove(1157920892373161954235709850086879078532699846656405640394575840079131296) : setApprove(0)"
+            @click="allowanceState.allowanceJLP === 0 ? setApprove(1234567890) : setApprove(0)"
           >
-            {{ allowanceState.allowanceJLP === 0 ? 'Approve' : 'Revoke' }} ${{ allowanceState.symbolJLP }} spending
+            {{ allowanceState.allowanceJLP === 0 ? 'Approve' : 'Revoke' }} $JLP spending
           </Button>
           <Button
             :disabled="!allowanceState.allowanceJLP"
-            @click="DepositJLP(100)"
+            @click="depositLP(1000000000000000)"
           >
-            Stake 100 BUCKS/AVAX JLP
+            Stake 0.001 BUCKS/AVAX JLP
           </Button>
 
           <Button
