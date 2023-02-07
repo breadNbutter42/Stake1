@@ -61,6 +61,9 @@ const { state: allowanceState, execute: loadAllowance } = useAsyncState(
 );
 
 const approvalPending = ref(false);
+const stakePending = ref(false);
+const withdrawPending = ref(false);
+
 
 const setApprove = async (_count) => {
   approvalPending.value = true;
@@ -87,9 +90,8 @@ const setApprove = async (_count) => {
   }
 };
 
-const withdrawMyLPAndRewardsPending = ref(false);
 const withdrawAll = async () => {
-  withdrawMyLPAndRewardsPending.value = true;
+  withdrawPending.value = true;
   try {
     const tx = await withdrawMyLPAndRewards();
     const receipt = await tx.wait();
@@ -107,9 +109,36 @@ const withdrawAll = async () => {
       text: error.reason ?? error.message,
     });
   } finally {
-    withdrawMyLPAndRewardsPending.value = false;
+    withdrawPending.value = false;
   }
 };
+
+
+
+const depositThatLP = async (_counter) => {
+  stakePending.value = true;
+  try {
+    const tx = await depositLP(_counter);
+    const receipt = await tx.wait();
+    notify({
+      type: "success",
+      title: "Staking",
+      text: `LP Deposited`,
+    });
+    emitAppEvent({ type: "tokensChanged" });
+    return Promise.resolve(receipt);
+  } catch (error) {
+    notify({
+      type: "error",
+      title: "Staking",
+      text: error.reason ?? error.message,
+    });
+  } finally {
+    stakePending.value = false;
+  }
+};
+
+
 
 const loadContractState = async () => {
   try {
@@ -197,6 +226,8 @@ onAppEvent(({ type }) => {
 
       <template v-if="isAuthenticated">
         <div class="max-w-[300px] text-center grid gap-4 mx-auto md:mx-0">
+
+
           <Button
             :loading="approvalPending"
             :disabled="approvalPending || !isAuthenticated || isAuthenticating"
@@ -209,9 +240,11 @@ onAppEvent(({ type }) => {
             {{ allowanceState.allowanceJLP === 0 ? "Approve" : "Revoke" }} $JLP
             spending
           </Button>
+
+
           <Button
-            :disabled="!allowanceState.allowanceJLP"
-            @click="depositLP(Number(state.balanceOfJLP))"
+            :disabled="!allowanceState.allowanceJLP || withdrawPending"
+            @click="depositThatLP(Number(state.balanceOfJLP))"
           >
             Stake All BUCKS/AVAX JLP
           </Button>
@@ -233,7 +266,7 @@ onAppEvent(({ type }) => {
             <Button
               :disabled="!JLPCount || !allowanceState.allowanceJLP || stakePending"
               :loading="stakePending"
-              @click="depositLP(Number(JLPCount))"
+              @click="depositThatLP(Number(JLPCount))"
             >
               Stake JLP
             </Button>
