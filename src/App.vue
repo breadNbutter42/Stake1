@@ -1,18 +1,20 @@
 <script setup>
-import useUser from '@/composables/useUser'
-import sliceAddress from '@/utils/sliceAddress'
+import useUser from "@/composables/useUser";
+import sliceAddress from "@/utils/sliceAddress";
 
-const { appBlockExplorer } = useUser()
+const { appBlockExplorer } = useUser();
 </script>
 
 <template>
-  <Navigation/>
+  <Navigation />
   <div class="flex items-center flex-grow">
-    <RouterView/>
+    <RouterView />
   </div>
-  <Footer/>
+  <Footer />
   <NotificationGroup>
-    <div class="fixed left-0 right-0 z-50 grid w-full max-w-sm mx-auto top-6 gap-y-2">
+    <div
+      class="fixed left-0 right-0 z-50 grid w-full max-w-sm mx-auto top-6 gap-y-2"
+    >
       <Notification
         v-slot="{ notifications, close }"
         enter="transform transition"
@@ -32,14 +34,16 @@ const { appBlockExplorer } = useUser()
           <template v-if="notification.payload" #footer="{ payload }">
             <template v-if="payload.type === 'receipt'">
               <div>
-                Etherscan transaction: <a :href="`${appBlockExplorer}/tx/${payload.receipt.txHash}`" target="_blank" class="text-blue-500">{{ sliceAddress(payload.receipt.txHash) }}</a>
+                Etherscan transaction:
+                <a
+                  :href="`${appBlockExplorer}/tx/${payload.receipt.txHash}`"
+                  target="_blank"
+                  class="text-blue-500"
+                  >{{ sliceAddress(payload.receipt.txHash) }}</a
+                >
               </div>
-              <div>
-                Gas cost: {{ payload.receipt.gasCost }} ETH
-              </div>
-              <div>
-                Block number: {{ payload.receipt.blockNumber }}
-              </div>
+              <div>Gas cost: {{ payload.receipt.gasCost }} ETH</div>
+              <div>Block number: {{ payload.receipt.blockNumber }}</div>
             </template>
           </template>
         </NotificationCard>

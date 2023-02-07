@@ -1,13 +1,10 @@
-
 <script setup>
-import App from '@/App.vue'
+import App from "@/App.vue";
 </script>
 
 <template>
   <Suspense>
-    <App/>
-    <template #fallback>
-      Loading...
-    </template>
+    <App />
+    <template #fallback> Loading... </template>
   </Suspense>
 </template>

@@ -1,41 +1,49 @@
-import { ref, computed } from 'vue'
-import { defineStore } from 'pinia'
-import { useStorage } from '@vueuse/core'
-import { chains } from '@/utils'
+import { ref, computed } from "vue";
+import { defineStore } from "pinia";
+import { useStorage } from "@vueuse/core";
+import { chains } from "@/utils";
 
-const userStore = defineStore('user', () => {
-  const address = ref(null)
-  const ens = ref(null)
-  const chainId = ref(null)
+const userStore = defineStore("user", () => {
+  const address = ref(null);
+  const ens = ref(null);
+  const chainId = ref(null);
 
-  const addressStorage = useStorage('address', null)
+  const addressStorage = useStorage("address", null);
 
-  const isAuthenticated = computed(() => Boolean(address.value))
-  const isAppNetwork = computed(() => chainId.value === import.meta.env.VITE_NETWORK)
+  const isAuthenticated = computed(() => Boolean(address.value));
+  const isAppNetwork = computed(
+    () => chainId.value === import.meta.env.VITE_NETWORK
+  );
 
-  const chainName = computed(() => chains[chainId.value].name ?? null)
-  const chainEnsSupport = computed(() => chains[chainId.value].ensSupported ?? null)
-  const appChainName = computed(() => chains[import.meta.env.VITE_NETWORK].name ?? null)
-  const appChain = computed(() => chains[import.meta.env.VITE_NETWORK] ?? null)
-  const appBlockExplorer = computed(() => chains[import.meta.env.VITE_NETWORK].explorer ?? null)
+  const chainName = computed(() => chains[chainId.value].name ?? null);
+  const chainEnsSupport = computed(
+    () => chains[chainId.value].ensSupported ?? null
+  );
+  const appChainName = computed(
+    () => chains[import.meta.env.VITE_NETWORK].name ?? null
+  );
+  const appChain = computed(() => chains[import.meta.env.VITE_NETWORK] ?? null);
+  const appBlockExplorer = computed(
+    () => chains[import.meta.env.VITE_NETWORK].explorer ?? null
+  );
 
   const setUser = (a, e) => {
-    address.value = a
-    ens.value = e
+    address.value = a;
+    ens.value = e;
 
-    addressStorage.value = a
-  }
+    addressStorage.value = a;
+  };
 
   const setChainId = (c) => {
-    chainId.value = c
-  }
+    chainId.value = c;
+  };
 
   const resetUser = () => {
-    address.value = null
-    ens.value = null
+    address.value = null;
+    ens.value = null;
 
-    addressStorage.value = null
-  }
+    addressStorage.value = null;
+  };
 
   return {
     address,
@@ -50,8 +58,8 @@ const userStore = defineStore('user', () => {
     setChainId,
     appChainName,
     appChain,
-    appBlockExplorer
-  }
-})
+    appBlockExplorer,
+  };
+});
 
-export default userStore
+export default userStore;
