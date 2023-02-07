@@ -1,3 +1,4 @@
+<!-- eslint-disable prettier/prettier -->
 <script setup>
 import {
   useJLPContract,
@@ -16,6 +17,8 @@ const { symbolJLP, allowanceJLP, approveJLP, balanceOfJLP } =
 const { symbolBucks, balanceOfBucks } = useBucksContract(address);
 const { myDepositedLP, pendingRewards, depositLP, withdrawMyLPAndRewards } =
   useRewarderContract(address);
+
+const JLPCount = ref(0)
 
 const loadAllowanceState = async () => {
   try {
@@ -208,14 +211,33 @@ onAppEvent(({ type }) => {
           </Button>
           <Button
             :disabled="!allowanceState.allowanceJLP"
-            @click="depositLP(1000000000000000)"
+            @click="depositLP(Number(state.balanceOfJLP))"
           >
-            Stake 0.001 BUCKS/AVAX JLP
+            Stake All BUCKS/AVAX JLP
           </Button>
 
           <Button :disabled="!state.myDepositedLP" @click="withdrawAll()">
-            Withdraw LP and Rewards
+            Withdraw All LP and Rewards
           </Button>
+
+
+          <div class="text-left self-end">
+            <div class="text-xs">
+              $JLP amount to deposit
+            </div>
+            <div class="text-gold-500 max-w-[100px]">
+              <input type="number" min="0" class="input input--default text-center" v-model="JLPCount" />
+            </div>
+          </div>
+          <div class="text-left self-end">
+            <Button
+              :disabled="!JLPCount || !allowanceState.allowanceJLP || stakePending"
+              :loading="stakePending"
+              @click="depositLP(Number(JLPCount))"
+            >
+              Stake JLP
+            </Button>
+          </div>
         </div>
       </template>
       <template v-else>
