@@ -27,7 +27,7 @@ export default (address) => {
       .then((response) =>
         Number(ethers.utils.formatEther(response)).toFixed(2)
       );
-  const depositLP = async (amt) => await contract.deposit(amt);
+  const depositLP = async (amt) => await contract.deposit(ethers.utils.parseEther(amt.toString()));
   const withdrawMyLPAndRewards = async () =>
     await contract.withdrawMyLPAndRewards();
 
