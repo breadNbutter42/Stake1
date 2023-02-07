@@ -9,6 +9,14 @@ import {
 import { ref } from "vue";
 import { useAsyncState, useEventBus } from "@vueuse/core";
 import { notify } from "notiwind";
+import IconJoe from "@/assets/icons/joe.svg";
+
+const joeLinks = [
+
+  {
+    icon: IconJoe,
+    href: "https://traderjoexyz.com/avalanche/pool/v1/AVAX/0xc94f5c4a091418d03ff1989b48db3139d1af0d25",
+  } ];
 
 const { on: onAppEvent, emit: emitAppEvent } = useEventBus("app");
 const { address, isAuthenticated, isAuthenticating, login } = useUser();
@@ -41,9 +49,9 @@ const loadAllowanceState = async () => {
     });
   }
   return Promise.resolve({
-    symbolBucks: "BUCKSS",
-    symbolJLP: "JLPP",
-    allowanceJLP: 69696969696969696969696969696969696969,
+    symbolBucks: "BUCKS",
+    symbolJLP: "JLP",
+    allowanceJLP: 0,
   });
 };
 
@@ -312,6 +320,15 @@ onAppEvent(({ type }) => {
       <div class="text-blue-200">
         Get JLP tokens by depositing LP into the TraderJoe BUCKS/AVAX LP pool.
       </div>
+      <a
+      v-for="({ href, icon }, index) in joeLinks"
+      :key="index"
+      :href="href"
+      target="_blank"
+      class="text-white transition hover:text-white/70 active:text-white"
+    >
+      <component :is="icon" class="w-6 h-6" />
+    </a>
       <div class="text-blue-200">
         Earn $BUCKS rewards split among all LP stakers.
       </div>

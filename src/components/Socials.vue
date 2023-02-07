@@ -4,6 +4,7 @@ import IconDiscord from "@/assets/icons/discord.svg";
 import IconBrain from "@/assets/icons/brain.svg";
 
 const socials = [
+
   {
     icon: IconTwitter,
     href: "https://twitter.com/CerveauAI",
@@ -15,7 +16,7 @@ const socials = [
   {
     icon: IconDiscord,
     href: "https://discord.gg/N3KV523e2Q",
-  },
+  },  
 ];
 </script>
 
