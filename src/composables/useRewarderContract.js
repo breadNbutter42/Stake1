@@ -19,13 +19,13 @@ export default (address) => {
     await contract
       .myDepositedLP()
       .then((response) =>
-        Number(ethers.utils.formatEther(response)).toFixed(2)
+        Number(ethers.utils.formatEther(response))
       );
   const pendingRewards = async (payload) =>
     await contract
       .pendingTokens(payload ?? address.value)
       .then((response) =>
-        Number(ethers.utils.formatEther(response)).toFixed(2)
+        Number(ethers.utils.formatEther(response))
       );
   const depositLP = async (amt) => await contract.deposit(ethers.utils.parseEther(amt.toString()));
   const withdrawMyLPAndRewards = async () =>
